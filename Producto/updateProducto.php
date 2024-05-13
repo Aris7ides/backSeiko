@@ -15,9 +15,10 @@ $nomP = $_POST['nomP'];
 $descP = $_POST['descP'];
 $precioP = $_POST['precioP'];
 $id_categoria = $_POST['id_categoria'];
+$img_path = $_POST['img_path'];
 
 // Editar cliente por email
-$query = "UPDATE producto SET nombreP = '$nomP',  descripcionP = '$descP', precioP = '$precioP', id_categoria = $id_categoria WHERE idP = '$idP'";
+$query = "UPDATE producto SET nombreP = '$nomP',  descripcionP = '$descP', precioP = '$precioP', id_categoria = '$id_categoria', img_path = '$img_path' WHERE idP = '$idP'";
 
 $result = $connection->query($query);
 

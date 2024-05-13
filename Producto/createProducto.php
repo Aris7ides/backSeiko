@@ -11,12 +11,20 @@ include "../inc/dbinfo.inc";
 //Conectar con la base de datos
 $connection = new mysqli(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
 
-$nomP = $_POST['nomP'];
-$descP = $_POST['descP'];
-$precioP = $_POST['precioP'];
-$id_categoria = $_POST['id_categoria'];
+// Verificar la conexión
+if ($connection->connect_error) {
+    die("Error de conexión: " . $connection->connect_error);
+}
 
-$query = "INSERT INTO producto (nombreP, descripcionP, id_categoria, precioP) VALUES ('$nomP', '$descP', '$precioP', '$id_categoria')";
+//Datos del post
+$nomP = isset($_POST['nomP']) ? $_POST['nomP'] : '';
+$descP = isset($_POST['descP']) ? $_POST['descP'] : '';
+$precioP = isset($_POST['precioP']) ? $_POST['precioP'] : '';
+$id_categoria = isset($_POST['id_categoria']) ? $_POST['id_categoria'] : '';
+$img_path = isset($_POST['img_path']) ? $_POST['img_path'] : '';
+
+//query
+$query = "INSERT INTO producto (nombreP, descripcionP, precioP, id_categoria, img_path) VALUES ('$nomP', '$descP', '$precioP', '$id_categoria', '$img_path')";
 
 $result = $connection->query($query);
 

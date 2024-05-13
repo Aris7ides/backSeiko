@@ -23,14 +23,14 @@ $response = [];
 
 if ($result === true) {
     $response['success'] = true;
-    $response['message'] = "Producto eliminado correctamente";
+    $response['message'] = "Producto eliminado correctamente (back)";
 
     // actualizar cantidad de productos
     $querytwo = "UPDATE categorias SET cantidadP = cantidadP - 1 WHERE id = $id_categoria";
     $connection->query($querytwo);
 } else {
     $response['success'] = false;
-    $response['message'] = "Error al eliminar el producto";
+    $response['message'] = "Error al eliminar el producto (back)";
 }
 
 echo json_encode($response);
