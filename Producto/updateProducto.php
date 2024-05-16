@@ -4,8 +4,10 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
 header("Access-Control-Allow-Headers: Content-Type");
 
-require_once '../vendor/autoload.php';
+require_once '../vendor/php-jwt-main/src/JWT.php';
+require_once '../vendor/php-jwt-main/src/Key.php';
 use \Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 
 session_start();
 include "../inc/dbinfo.inc";
@@ -18,7 +20,7 @@ $secret_key = SECRET_KEY;
 $jwt = $_POST['jwt'];
 
 try {
-    $decoded = JWT::decode($jwt, $secret_key, array('HS256'));
+    $decoded = JWT::decode($jwt, new Key($secret_key, 'HS256'));
 } catch (Exception $e) {
     http_response_code(401);
     die();

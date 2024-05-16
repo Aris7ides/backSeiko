@@ -1,6 +1,6 @@
 <?php
 
-require_once '../vendor/autoload.php';
+require_once '../vendor/php-jwt-main/src/JWT.php';
 use \Firebase\JWT\JWT; // Add this line to import the JWT class
 
 //permite el accesio desde diferentes origenes
@@ -35,7 +35,7 @@ if(password_verify($pin, $hashContraseña)){
         "email" => $email,
         "exp" => time() + 3600
     );
-    $jwt = JWT::encode($token, SECRET_KEY);
+    $jwt = JWT::encode($token, SECRET_KEY, "HS256");
     $response['jwt'] = $jwt;
 } else {
     $response['success'] = false;
