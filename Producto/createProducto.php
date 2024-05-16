@@ -4,6 +4,9 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
 header("Access-Control-Allow-Headers: Content-Type");
 
+require_once '../vendor/autoload.php';
+use \Firebase\JWT\JWT;
+
 session_start();
 include "../inc/dbinfo.inc";
 
@@ -11,20 +14,41 @@ include "../inc/dbinfo.inc";
 //Conectar con la base de datos
 $connection = new mysqli(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
 
-// Verificar la conexión
-if ($connection->connect_error) {
-    die("Error de conexión: " . $connection->connect_error);
+$nomP = $_POST['nomP'];
+$descP = $_POST['descP'];
+$precioP = $_POST['precioP'];
+$id_categoria = $_POST['id_categoria'];
+$jwt = $_POST['jwt'];
+
+// Verificar el JWT
+$secret_key = SECRET_KEY;
+$jwt = $_POST['jwt'];
+
+try {
+    $decoded = JWT::decode($jwt, $secret_key, array('HS256'));
+} catch (Exception $e) {
+    http_response_code(401);
+    die();
 }
 
-//Datos del post
-$nomP = isset($_POST['nomP']) ? $_POST['nomP'] : '';
-$descP = isset($_POST['descP']) ? $_POST['descP'] : '';
-$precioP = isset($_POST['precioP']) ? $_POST['precioP'] : '';
-$id_categoria = isset($_POST['id_categoria']) ? $_POST['id_categoria'] : '';
-$img_path = isset($_POST['img_path']) ? $_POST['img_path'] : '';
+// Comprobar si el usuario tiene permisos de admin
+$email = $decoded->email;
+$query = "SELECT tipo FROM usuario WHERE email = '$email'";
 
-//query
-$query = "INSERT INTO producto (nombreP, descripcionP, precioP, id_categoria, img_path) VALUES ('$nomP', '$descP', '$precioP', '$id_categoria', '$img_path')";
+$result = $connection->query($query);
+
+if ($result->num_rows > 0) {
+    $fila = $result->fetch_assoc();
+    if ($fila['tipo'] != 1) {
+        http_response_code(401);
+        die();
+    }
+} else {
+    http_response_code(401);
+    die();
+}
+
+$query = "INSERT INTO producto (nombreP, descripcionP, id_categoria, precioP) VALUES ('$nomP', '$descP', '$precioP', '$id_categoria')";
 
 $result = $connection->query($query);
 
