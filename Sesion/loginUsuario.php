@@ -17,7 +17,7 @@ $pin = $_POST['pin'];
 //Conectar con la base de datos
 $connection = new mysqli(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
 
-$query='SELECT psswd FROM usuario WHERE email = "'.$email.'"';
+$query='SELECT * FROM usuario WHERE email = "'.$email.'"';
 
 $result = $connection->query($query);
 
@@ -29,6 +29,9 @@ $hashContraseña = $fila['psswd'];
 if(password_verify($pin, $hashContraseña)){
     $response['success'] = true;
     $response['message'] = "Usuario logueado correctamente";
+    $response['user'] = $fila['user'];
+    $response['email'] = $email;
+    $response['tipo'] = $fila['Tipo'];
    
     // Generar un JWT que incluya el email del usuario y la fecha de expiración
     $token = array(
@@ -36,7 +39,9 @@ if(password_verify($pin, $hashContraseña)){
         "exp" => time() + 3600
     );
     $jwt = JWT::encode($token, SECRET_KEY, "HS256");
+
     $response['jwt'] = $jwt;
+    
 } else {
     $response['success'] = false;
     $response['message'] = "Error al loguear el usuario";
