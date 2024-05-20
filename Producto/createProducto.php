@@ -51,7 +51,7 @@ $id_categoria = $_POST['id_categoria'];
 $img_path = $_POST['img_path'];
 // $jwt = $_POST['jwt'];
 
-$query = "INSERT INTO producto (nombreP, descripcionP, id_categoria, precioP, img_path) VALUES ('$nomP', '$descP', '$precioP', '$id_categoria', '$img_path')";
+$query = "INSERT INTO producto (nombreP, descripcionP, id_categoria, precioP, img_path) VALUES ('$nomP', '$descP', '$id_categoria', '$precioP', '$img_path')";
 
 $result = $connection->query($query);
 
